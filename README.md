@@ -10,13 +10,18 @@ Aanbevolen instellingen:
 - Publish directory: `.`
 - Functions directory: `netlify/functions`
 
-De gedeelde online opslag loopt via:
+De beveiligde login en gedeelde online opslag lopen via:
 
+- `netlify/functions/auth.js`
 - `netlify/functions/reporting.js`
 - `@netlify/blobs`
 
-## Let op met wachtwoorden
+## Wachtwoorden
 
-De wachtwoorden in `app.js` zijn prototype-wachtwoorden voor de rolkeuze in de website. Gebruik voor echte besloten toegang altijd ook Netlify Password Protection of een andere server-side beveiliging.
+De wachtwoorden staan niet in de websitecode. Zet ze in Netlify bij Environment variables:
 
-De spreadsheet met wachtwoorden staat bewust niet in deze repository en wordt via `.gitignore` uitgesloten.
+- `KERSENBOOM_INTERNAL_PASSWORD`
+- `KERSENBOOM_EXTERNAL_PASSWORD`
+- `KERSENBOOM_AUTH_SECRET`
+
+Gebruik voor `KERSENBOOM_AUTH_SECRET` een lange willekeurige tekst. Gebruik voor echte site-brede afscherming daarnaast Netlify Password Protection of een andere server-side beveiliging.

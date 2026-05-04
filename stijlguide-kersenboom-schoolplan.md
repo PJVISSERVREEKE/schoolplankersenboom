@@ -96,9 +96,9 @@ Bij openen kiest de gebruiker eerst:
 - Ik ben intern
 - Ik ben extern
 
-Daarna volgt het bijbehorende wachtwoord. De demo-wachtwoorden staan in de spreadsheet `kersenboom-schoolplan-toegang-en-stijl.xlsx`.
+Daarna volgt het bijbehorende wachtwoord. De wachtwoorden horen als Environment variables in Netlify te staan en niet in de websitecode.
 
-Let op: de wachtwoorden in de website zijn functioneel voor het prototype. Voor echte besloten toegang moet Netlify Password Protection of een andere server-side beveiliging actief zijn.
+Let op: voor echte besloten toegang tot alle statische bestanden is Netlify Password Protection of een andere server-side beveiliging nodig.
 
 ## Opslag
 
@@ -122,7 +122,8 @@ Belangrijkste sitebestanden:
 - `styles.css`
 - `app.js`
 - `assets/`
-- `netlify/functions/reporting.mjs`
+- `netlify/functions/auth.js`
+- `netlify/functions/reporting.js`
 - `package.json`
 - `netlify.toml`
 

@@ -1,9 +1,7 @@
-const PASSWORDS = {
-  internal: "kersenboom2026",
-  external: "voortgang2026",
-};
 const STORAGE_KEY = "kersenboom-schoolplan-rapportage-v1";
 const API_ENDPOINT = "/.netlify/functions/reporting";
+const AUTH_ENDPOINT = "/.netlify/functions/auth";
+const AUTH_TOKEN_KEY = "kersenboom-auth-token";
 const planningYears = ["2026-2027", "2027-2028", "2028-2029", "2029-2030"];
 let selectedRole = null;
 let currentRole = sessionStorage.getItem("kersenboom-role") || null;
@@ -429,7 +427,12 @@ async function loadRemoteState() {
 
   setSyncStatus("Online laden...", "loading");
   try {
-    const response = await fetch(API_ENDPOINT, { headers: { Accept: "application/json" } });
+    const response = await fetch(API_ENDPOINT, {
+      headers: {
+        Accept: "application/json",
+        ...authHeaders(),
+      },
+    });
     if (!response.ok) throw new Error(`Online opslag gaf ${response.status}`);
     const payload = await response.json();
     if (payload.reporting && Object.keys(payload.reporting).length) {
@@ -459,6 +462,7 @@ async function saveRemoteState() {
         "Content-Type": "application/json",
         Accept: "application/json",
         "X-Kersenboom-Role": currentRole || "external",
+        ...authHeaders(),
       },
       body: JSON.stringify({ reporting: state }),
     });
@@ -516,11 +520,45 @@ function roleLabel(role) {
   return role === "internal" ? "Interne omgeving" : "Externe voortgang";
 }
 
-function applyRole(role) {
+function applyRole(role, token = sessionStorage.getItem(AUTH_TOKEN_KEY)) {
   currentRole = role;
   document.body.dataset.role = role;
   sessionStorage.setItem("kersenboom-role", role);
   sessionStorage.setItem("kersenboom-auth", "true");
+  if (token) sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+}
+
+function authHeaders() {
+  const token = sessionStorage.getItem(AUTH_TOKEN_KEY);
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+async function authenticate(role, password) {
+  if (!canUseRemoteStorage()) {
+    return {
+      ok: false,
+      message: "Deze beveiligde login werkt op de online Netlify-versie.",
+    };
+  }
+
+  const response = await fetch(AUTH_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ role, password }),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload.token) {
+    return {
+      ok: false,
+      message: payload.error || "Dat wachtwoord klopt niet.",
+    };
+  }
+
+  return { ok: true, token: payload.token };
 }
 
 function visualMarkup(type) {
@@ -996,9 +1034,7 @@ function bindEvents() {
       byId("role-choice").classList.add("is-hidden");
       byId("login-form").classList.add("is-active");
       byId("selected-role-label").textContent = roleLabel(selectedRole);
-      byId("password-hint").innerHTML = selectedRole === "internal"
-        ? "Demo intern: <strong>kersenboom2026</strong>"
-        : "Demo extern: <strong>voortgang2026</strong>";
+      byId("password-hint").textContent = "Vul het afgesproken wachtwoord in. Dit wachtwoord staat niet in de websitecode.";
       byId("password").value = "";
       byId("password").focus();
     });
@@ -1012,27 +1048,38 @@ function bindEvents() {
     byId("password").value = "";
   });
 
-  byId("login-form").addEventListener("submit", (event) => {
+  byId("login-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!selectedRole) {
       byId("login-error").textContent = "Kies eerst intern of extern.";
       return;
     }
-    if (byId("password").value === PASSWORDS[selectedRole]) {
-      applyRole(selectedRole);
+
+    byId("login-error").textContent = "";
+    const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = "Controleren...";
+    const result = await authenticate(selectedRole, byId("password").value);
+    submitButton.disabled = false;
+    submitButton.textContent = "Open";
+
+    if (result.ok) {
+      applyRole(selectedRole, result.token);
       byId("gate").classList.add("is-hidden");
       byId("app").classList.remove("is-hidden");
       byId("login-error").textContent = "";
       location.hash = selectedRole === "external" ? "#extern" : "#home";
       routeToHash();
+      loadRemoteState();
     } else {
-      byId("login-error").textContent = "Dat wachtwoord klopt niet.";
+      byId("login-error").textContent = result.message;
     }
   });
 
   byId("logout-button").addEventListener("click", () => {
     sessionStorage.removeItem("kersenboom-auth");
     sessionStorage.removeItem("kersenboom-role");
+    sessionStorage.removeItem(AUTH_TOKEN_KEY);
     currentRole = null;
     selectedRole = null;
     delete document.body.dataset.role;
@@ -1126,13 +1173,13 @@ function boot() {
   bindEvents();
   generateReport();
 
-  if (sessionStorage.getItem("kersenboom-auth") === "true") {
+  if (sessionStorage.getItem("kersenboom-auth") === "true" && sessionStorage.getItem(AUTH_TOKEN_KEY)) {
     applyRole(currentRole || "internal");
     byId("gate").classList.add("is-hidden");
     byId("app").classList.remove("is-hidden");
   }
   routeToHash();
-  loadRemoteState();
+  if (sessionStorage.getItem(AUTH_TOKEN_KEY)) loadRemoteState();
 }
 
 boot();
