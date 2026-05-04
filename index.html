@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Schoolplan 2026-2029 | Brede School de Kersenboom</title>
+    <link rel="preconnect" href="https://www.bsdekersenboom.nl" />
+    <link rel="preconnect" href="https://www.florentebasisscholen.nl" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="gate" id="gate" aria-labelledby="gate-title">
+      <div class="gate__panel">
+        <div class="brand-row">
+          <img src="assets/bsd-k-logo.png" alt="Logo De Kersenboom" />
+          <span>Besloten schoolplanomgeving</span>
+        </div>
+        <h1 id="gate-title">Welkom bij het schoolplan</h1>
+        <p>Kies eerst hoe je de omgeving wilt gebruiken. Daarna log je in met het passende wachtwoord.</p>
+        <div class="role-choice" id="role-choice">
+          <button class="role-card" type="button" data-role-select="internal">
+            <strong>Ik ben intern</strong>
+            <span>Voor team, directie en specialisten: bijwerken, rapporteren en plannen volgen.</span>
+          </button>
+          <button class="role-card" type="button" data-role-select="external">
+            <strong>Ik ben extern</strong>
+            <span>Voor bestuur, MR en inspectie: voortgang en plannen bekijken.</span>
+          </button>
+        </div>
+        <form id="login-form" class="login-form">
+          <button class="back-button" id="role-back" type="button">Terug naar keuze</button>
+          <p class="selected-role" id="selected-role-label"></p>
+          <label for="password">Wachtwoord</label>
+          <div class="password-row">
+            <input id="password" type="password" autocomplete="current-password" placeholder="Vul wachtwoord in" />
+            <button type="submit">Open</button>
+          </div>
+          <p class="form-hint" id="password-hint"></p>
+          <p class="error" id="login-error" role="alert"></p>
+        </form>
+      </div>
+    </section>
+
+    <div class="app-shell is-hidden" id="app">
+      <header class="site-header">
+        <a class="school-mark" href="#home" aria-label="Naar de startpagina">
+          <img src="assets/bsd-k-logo.png" alt="" />
+          <span>
+            <strong>Schoolplan 2026-2029</strong>
+            <small>Brede School de Kersenboom</small>
+          </span>
+        </a>
+        <nav class="main-nav" aria-label="Hoofdnavigatie">
+          <div class="nav-dropdown">
+            <button class="nav-dropdown__button" type="button" aria-expanded="false">
+              Thema's
+              <span aria-hidden="true">▾</span>
+            </button>
+            <div class="nav-dropdown__menu" id="theme-menu"></div>
+          </div>
+          <a href="#extern" class="external-only">Voortgang</a>
+          <a href="#plannen">Plannenbank</a>
+          <a href="#rapport" class="internal-only">Rapport</a>
+        </nav>
+        <span class="sync-status" id="sync-status">Lokale opslag</span>
+        <button class="ghost-button" id="logout-button" type="button">Vergrendel</button>
+      </header>
+
+      <main id="top">
+        <section class="page-view home-page" id="home">
+          <div class="hero">
+          <img
+            class="hero__image"
+            src="assets/kersenboom-header.jpg"
+            alt="Het gebouw van Brede School de Kersenboom"
+          />
+          <div class="hero__shade"></div>
+          <div class="hero__content">
+            <img class="hero__logo" src="assets/bsd-k-logo.png" alt="De Kersenboom brede school" />
+            <p class="eyebrow">Samen leren wij meer</p>
+            <h1>Besloten stuur- en rapportageomgeving</h1>
+            <p>
+              Schoolplan 2026-2029 van Brede School de Kersenboom. Hier beheer je ambities,
+              planning, voortgang, zichtbare resultaten en rapportage richting inspectie,
+              bestuur en MR.
+            </p>
+            <div class="hero__actions">
+              <a class="primary-button" href="#thema-onderwijskwaliteit">Start rapportage</a>
+              <a class="secondary-button" href="#themas">Bekijk thema's</a>
+            </div>
+          </div>
+          </div>
+
+          <div class="landing-purpose" aria-label="Doel van deze omgeving">
+            <article>
+            <p class="section-label">Doel</p>
+            <h2>Van conceptdocument naar bestuurbare uitvoering.</h2>
+          </article>
+          <p>
+              De definitieve planning kan later per ambitie worden toegevoegd. Deze omgeving is
+              alvast ingericht om schooljaren, acties, bewijs en rapportageteksten vast te leggen.
+              De basis blijft de visie: kinderen leren op hun eigen niveau, alleen en samen, in een
+              rijke leeromgeving waarin leren zichtbaar wordt.
+          </p>
+          </div>
+
+          <section class="identity-band" aria-label="Identiteit van De Kersenboom">
+            <div class="identity-band__text">
+              <p class="section-label">Onze identiteit</p>
+              <h2>Samen leren wij meer.</h2>
+              <p>
+                Leren gebeurt zelfstandig en met elkaar. Kinderen nemen verantwoordelijkheid,
+                geven en ontvangen vertrouwen en respect, en krijgen ruimte om actief te leren
+                in een uitdagende, ontwikkelingsgerichte omgeving.
+              </p>
+              <div class="identity-values">
+                <span>Veiligheid</span>
+                <span>Duurzaamheid</span>
+                <span>Samen</span>
+                <span>Verantwoordelijkheid</span>
+                <span>Vakkundigheid</span>
+              </div>
+            </div>
+            <div class="identity-collage" aria-hidden="true">
+              <img src="assets/samen-1-school/luisteren.jpg" alt="" />
+              <img src="assets/samen-1-school/helpen-elkaar.jpg" alt="" />
+              <img src="assets/samen-1-school/respect.jpg" alt="" />
+            </div>
+          </section>
+
+          <section class="metric-strip" aria-label="Samenvatting status">
+          <article>
+            <span id="metric-ambitions">23</span>
+            <p>ambities in beeld</p>
+          </article>
+          <article>
+            <span id="metric-progress">0%</span>
+            <p>gemiddelde voortgang</p>
+          </article>
+          <article>
+            <span id="metric-risks">0</span>
+            <p>risico's of stilstand</p>
+          </article>
+          <article>
+            <span id="metric-evidence">0</span>
+            <p>resultaten zichtbaar</p>
+          </article>
+          </section>
+
+          <section class="theme-overview" id="themas">
+            <div class="theme-grid" id="theme-grid"></div>
+          </section>
+        </section>
+
+        <section class="page-view theme-pages is-hidden" id="theme-pages" aria-label="Themapagina's"></section>
+
+        <section class="page-view external-progress is-hidden" id="extern">
+          <div class="external-hero">
+            <div>
+              <p class="section-label">Voortgang schoolplan 2026-2029</p>
+              <h1>Samen leren wij meer, zichtbaar in voortgang.</h1>
+              <p>
+                Deze pagina geeft een actuele, korte weergave van alle ambities, resultaten en
+                plannen binnen de vier Florente-thema's.
+              </p>
+            </div>
+            <img src="assets/samen-1-school/leerplein.jpg" alt="" />
+          </div>
+          <section class="metric-strip external-metrics" aria-label="Samenvatting externe voortgang">
+            <article>
+              <span id="external-metric-progress">0%</span>
+              <p>gemiddelde voortgang</p>
+            </article>
+            <article>
+              <span id="external-metric-ontrack">0</span>
+              <p>op koers of afgerond</p>
+            </article>
+            <article>
+              <span id="external-metric-attention">0</span>
+              <p>aandacht of risico</p>
+            </article>
+            <article>
+              <span id="external-metric-evidence">0</span>
+              <p>resultaten zichtbaar</p>
+            </article>
+          </section>
+          <div class="external-theme-list" id="external-theme-list"></div>
+        </section>
+
+        <section class="page-view reporting is-hidden" id="rapportage">
+          <div class="section-heading">
+            <p class="section-label">Rapporteren</p>
+            <h2>Werk per ambitie de stand van zaken bij.</h2>
+            <p>
+              Elke wijziging wordt lokaal opgeslagen in deze browser. De velden zijn ingericht op
+              voortgang, planning, zichtbare resultaten, risico's en de uitleg die nodig is voor verantwoording.
+            </p>
+          </div>
+          <div class="planning-note">
+            <strong>Planning volgt later.</strong>
+            <span>
+              Per ambitie is alvast ruimte toegevoegd voor schooljaren, planningnotities en
+              bijstelling wanneer het conceptdocument definitief wordt.
+            </span>
+          </div>
+          <div class="toolbar">
+            <label>
+              Thema
+              <select id="theme-filter"></select>
+            </label>
+            <label>
+              Status
+              <select id="status-filter">
+                <option value="all">Alle statussen</option>
+                <option value="Op koers">Op koers</option>
+                <option value="Aandacht nodig">Aandacht nodig</option>
+                <option value="Risico">Risico</option>
+                <option value="Afgerond">Afgerond</option>
+              </select>
+            </label>
+            <label class="search-field">
+              Zoeken
+              <input id="search-input" type="search" placeholder="Zoek in doelen, acties of resultaten" />
+            </label>
+          </div>
+          <div class="ambition-list" id="ambition-list"></div>
+        </section>
+
+        <section class="page-view plans is-hidden" id="plannen">
+          <div class="section-heading">
+            <p class="section-label">Plannenbank</p>
+            <h2>Een database voor alles waar aan gewerkt moet worden.</h2>
+            <p>
+              Deze eerste versie laat de plannen als stuurbare werkvoorraad zien. Later kan dit
+              worden uitgebreid met eigenaren, deadlines, bijlagen, rollen en autorisaties.
+            </p>
+          </div>
+          <div class="plans-board" id="plans-board"></div>
+        </section>
+
+        <section class="page-view report-maker is-hidden" id="rapport">
+          <div class="section-heading">
+            <p class="section-label">Rapportgenerator</p>
+            <h2>Maak een conceptverslag voor inspectie, bestuur of MR.</h2>
+          </div>
+          <div class="report-layout">
+            <div class="report-controls">
+              <label>
+                Doelgroep
+                <select id="audience">
+                  <option>Inspectie</option>
+                  <option>Bestuur</option>
+                  <option>Medezeggenschapsraad</option>
+                </select>
+              </label>
+              <label>
+                Periode
+                <input id="period" value="Schooljaar 2026-2027" />
+              </label>
+              <label>
+                Toon
+                <select id="tone">
+                  <option>Zakelijk en feitelijk</option>
+                  <option>Bestuurlijk compact</option>
+                  <option>Oudergericht begrijpelijk</option>
+                </select>
+              </label>
+              <div class="button-row">
+                <button class="primary-button" id="generate-report" type="button">Genereer rapport</button>
+                <button class="secondary-button" id="export-json" type="button">Export data</button>
+                <button class="secondary-button" id="print-report" type="button">Print</button>
+              </div>
+            </div>
+            <textarea id="report-output" spellcheck="true" aria-label="Conceptrapport"></textarea>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
